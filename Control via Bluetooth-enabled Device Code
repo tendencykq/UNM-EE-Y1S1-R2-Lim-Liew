@@ -1,0 +1,115 @@
+#include <SoftwareSerial.h>
+
+#define in1 A1
+#define in2 A2
+#define in3 A3
+#define in4 2
+#define enA 3
+#define enB 11
+
+char lastCommand = '\0'; // Variable to store the last command
+unsigned long lastReceivedTime = 0;
+const unsigned long timeout = 2000; // 2 seconds timeout
+
+// RX and TX pins for communication with the Bluetooth module
+SoftwareSerial Bluetooth(0, 1); // RX, TX
+
+void setup() {
+  // Initialize motor pins as OUTPUT
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  pinMode(enA, OUTPUT);
+  pinMode(enB, OUTPUT);
+
+  // Start Serial for debugging
+  Serial.begin(9600);
+
+  // Initialize Bluetooth communication
+  Bluetooth.begin(9600); 
+}
+
+// Function to stop the motors
+void stopMotors() {
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+
+void move_straight();
+void turn_left();
+void turn_right();
+void stop();
+void reverse();
+
+void loop() {
+  if (Bluetooth.available()) {
+    char receivedChar = Bluetooth.read();
+
+    // Only act if the command is new
+    if (receivedChar != lastCommand) {
+      lastCommand = receivedChar; // Update last command
+      
+      if (receivedChar == 'F') {
+        move_straight();
+      }  
+      if (receivedChar == 'B') {
+        reverse();
+      } 
+      if (receivedChar == 'L') {
+        turn_left();
+      } 
+      if (receivedChar == 'R') {
+        turn_right();
+      }  
+      if (receivedChar == 'S') { 
+        stop();
+    }
+  }
+}
+}
+
+void move_straight(){
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  analogWrite(enA, 170);
+  analogWrite(enB, 170);
+}
+
+void reverse(){
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  analogWrite(enA, 170);
+  analogWrite(enB, 170);
+}
+
+void turn_left(){
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  analogWrite(enA, 120);
+  analogWrite(enB, 120);
+}
+
+void turn_right(){
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  analogWrite(enA, 120);
+  analogWrite(enB, 120);
+}
+
+void stop(){
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
