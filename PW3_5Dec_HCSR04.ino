@@ -1,0 +1,48 @@
+const int trigPin = 3;
+const int echoPin = 2;
+// defines variables
+long duration;
+int distance;
+
+void move_straight(){
+  digitalWrite(in1, LOW); 
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  analogWrite(enA, 120);
+  analogWrite(enB, 120);
+}
+
+void stop(){
+  digitalWrite(in1, LOW); 
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, LOW);
+}
+
+void setup() {
+  pinMode(trigPin, OUTPUT); 
+  pinMode(echoPin, INPUT); 
+}
+
+void loop() {
+
+  move_staright(); 
+
+  // Clears the trigPin
+  digitalWrite(trigPin, LOW);t
+  delayMicroseconds(2);
+
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH)
+
+  distance = duration * 0.034 / 2;
+
+  if (distance < 20){
+    stop();
+  }
+}
