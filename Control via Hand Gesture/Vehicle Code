@@ -1,0 +1,84 @@
+#include <SoftwareSerial.h>
+SoftwareSerial BTSerial(10, 11); // CONNECT BT RX PIN TO ARDUINO 11 PIN | CONNECT BT TX PIN TO ARDUINO 10 PIN
+char tiltDirection;
+#define motorInput1 A1
+#define motorInput2 A2
+#define motorInput3 A3
+#define motorInput4 A4
+#define enA 6
+#define enB 5
+
+void setup() {
+  pinMode(motorInput1, OUTPUT);
+  pinMode(motorInput2, OUTPUT);
+  pinMode(motorInput3, OUTPUT);
+  pinMode(motorInput4, OUTPUT);
+  Serial.begin(38400);
+
+  BTSerial.begin(9600);   
+}
+
+void loop() {
+
+    tiltDirection = BTSerial.read();
+
+    if(tiltDirection == 'F'){
+       move_straight();
+    } 
+    if(tiltDirection == 'B'){
+      reverse();
+    }
+    if(tiltDirection == 'R'){
+      turn_right();
+    }
+    if(tiltDirection == 'L'){
+      turn_left();
+    }
+    if (tiltDirection == 'S'){
+      stop();
+    }
+}
+
+//Robot lk
+void move_straight()
+{
+  digitalWrite(motorInput1, LOW);
+  digitalWrite(motorInput2, HIGH);
+  digitalWrite(motorInput3, LOW);
+  digitalWrite(motorInput4, HIGH);
+  analogWrite(enA, 120);
+  analogWrite(enB, 120);
+}
+void reverse()
+{
+  digitalWrite(motorInput1, HIGH);
+  digitalWrite(motorInput2, LOW);
+  digitalWrite(motorInput3, HIGH);
+  digitalWrite(motorInput4, LOW);
+  analogWrite(enA, 200);
+  analogWrite(enB, 200);
+}
+void turn_right()
+{
+  digitalWrite(motorInput1, LOW);
+  digitalWrite(motorInput2, HIGH);
+  digitalWrite(motorInput3, HIGH);
+  digitalWrite(motorInput4, LOW);
+  analogWrite(enA, 200);
+  analogWrite(enB, 200);
+}
+void turn_left()
+{
+  digitalWrite(motorInput1, HIGH);
+  digitalWrite(motorInput2, LOW);
+  digitalWrite(motorInput3, LOW);
+  digitalWrite(motorInput4, HIGH);
+  analogWrite(enA, 200);
+  analogWrite(enB, 200);
+}
+void stop() {
+  digitalWrite(motorInput1, LOW);
+  digitalWrite(motorInput2, LOW);
+  digitalWrite(motorInput3, LOW);
+  digitalWrite(motorInput4, LOW);
+}
